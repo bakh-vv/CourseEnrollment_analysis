@@ -31,7 +31,17 @@ with open('enrollments.csv', 'rb') as f:
 
 '''
 
-enrollments[0]
+#print(enrollments[0])
 
+with open('daily_engagement.csv', 'rb') as f:
+    reader = unicodecsv.DictReader(f)
+    daily_engagement = list(reader)
+
+with open('project_submissions.csv', 'rb') as f:
+    reader = unicodecsv.DictReader(f)
+    project_submissions = list(reader)
+
+#print(daily_engagement[0])
+#print(project_submissions[0])
 
 
