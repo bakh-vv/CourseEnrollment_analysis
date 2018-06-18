@@ -102,22 +102,19 @@ for submission in project_submissions:
 print(project_submissions[0])
 
 
-#enrollment_num_rows = len(enrollments)
+enrollment_num_rows = len(enrollments)
 #enrollment_num_unique_students = len(set([dic['account_key'] for dic in enrollments]))
 
-#engagement_num_rows = len(daily_engagement)
+engagement_num_rows = len(daily_engagement)
 #engagement_num_unique_students = len(set([dic['acct'] for dic in daily_engagement]))
 
-#submission_num_rows = len(project_submissions)          
+submission_num_rows = len(project_submissions)          
 #submission_num_unique_students = len(set([dic['account_key'] for dic in project_submissions]))
 
 print(enrollment_num_rows)
 print(engagement_num_rows)
 print(submission_num_rows)
 
-print(enrollment_num_unique_students)
-print(engagement_num_unique_students)
-print(submission_num_unique_students)
 
 #renaming column name, to keep it the same among the 3 files, by creating a new one and then deleting the old one
 for dict in daily_engagement:
@@ -125,3 +122,21 @@ for dict in daily_engagement:
 
 for dict in daily_engagement:
     del dict['acct']
+
+# creating a function that investigates the 3 files, replacing the repetitive code above
+def get_unique_students(data):
+    return set([dic['account_key'] for dic in data])
+
+unique_enrolled_students = get_unique_students(enrollments)
+enrollment_num_unique_students = len(unique_enrolled_students)
+unique_engagement_students = get_unique_students(daily_engagement)
+engagement_num_unique_students = len(unique_engagement_students)
+unique_project_submitters = get_unique_students(project_submissions)
+submission_num_unique_students = len(unique_project_submitters)
+
+print(enrollment_num_unique_students)
+print(engagement_num_unique_students)
+print(submission_num_unique_students)
+
+
+    
