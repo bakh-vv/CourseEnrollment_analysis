@@ -150,7 +150,28 @@ surprising_enrollments = []
 for record in enrollments:
     if record['account_key'] not in unique_engagement_students and record['join_date'] != record['cancel_date']:
         surprising_enrollments.append(record)
-        
+# there are 3. Turns out they are  internal test accounts, which explains them
 
 
-    
+#removing all test accounts
+udacity_test_accounts = set()
+for enrollment in enrollments:
+    if enrollment['is_udacity']:
+        udacity_test_accounts.add(enrollment['account_key'])
+
+len(udacity_test_accounts)
+
+def remove_udacity_accounts(data):
+    non_udacity_data = []
+    for data_point in data:
+        if data_point['account_key'] not in udacity_test_accounts:
+            non_udacity_data.append(data_point)
+    return non_udacity_data
+
+non_udacity_enrollments = remove_udacity_accounts(enrollments)
+non_udacity_engagement = remove_udacity_accounts(daily_engagement)
+non_udacity_submissions = remove_udacity_accounts(project_submissions)
+
+print(len(non_udacity_enrollments))
+print(len(non_udacity_engagement))
+print(len(non_udacity_submissions))
