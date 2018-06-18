@@ -138,5 +138,19 @@ print(enrollment_num_unique_students)
 print(engagement_num_unique_students)
 print(submission_num_unique_students)
 
+#finding any one enrolled student that doesn't appear in an engagement document
+for record in enrollments:
+    if record['account_key'] not in unique_engagement_students:
+        print(record)
+        break
+
+# checking if there are enrolled students that don't appear in the engagement document that stayed enrolled
+# at least one day
+surprising_enrollments = []
+for record in enrollments:
+    if record['account_key'] not in unique_engagement_students and record['join_date'] != record['cancel_date']:
+        surprising_enrollments.append(record)
+        
+
 
     
