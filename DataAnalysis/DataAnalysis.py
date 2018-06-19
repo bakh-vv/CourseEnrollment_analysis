@@ -175,3 +175,52 @@ non_udacity_submissions = remove_udacity_accounts(project_submissions)
 print(len(non_udacity_enrollments))
 print(len(non_udacity_engagement))
 print(len(non_udacity_submissions))
+
+
+# Exploring the difference between those who passed and those who didn't
+
+# to standardize the data we'll use the first week of their engagement records
+paid_students = {}
+#for enrollment in non_udacity_enrollments:
+#    if enrollment['is_canceled'] == False or enrollment['days_to_cancel'] > 7:
+#        paid_students[enrollment['account_key']] = enrollment['join_date'] 
+
+# we'll save the enrollment date from their latest enrollment (not just from a random enrollment)
+for enrollment in non_udacity_enrollments:
+    if enrollment['is_canceled'] == False or enrollment['days_to_cancel'] > 7:
+        account_key = enrollment['account_key']
+        enrollment_date = enrollment['join_date'] 
+
+        if account_key not in paid_students or \
+            enrollment_date > paid_students[account_key]:
+            paid_students[account_key] = enrollment_date
+        
+
+print(len(paid_students))
+
+# filter engagement data for paid users duting their first week after enrolling
+def within_one_week(join_date, engagement_date):
+    time_delta = engagement_date - join_date
+    return time_delta.days < 7
+
+paid_engagement_in_first_week = []
+for record in non_udacity_engagement:
+    account_key = record['account_key']
+    
+    if account_key in list(paid_students.keys()) and within_one_week(paid_students[account_key], record['utc_date']):
+        paid_engagement_in_first_week.append(record)
+
+len(paid_engagement_in_first_week)
+
+#def remove_free_trial_cancels(data):
+#    new_data = []
+#    for data_point in data:
+#        if data_point['account_key'] in paid_students:
+#            new_data.append(data_point)
+#    return new_data
+
+#paid_enrollments = remove_free_trial_cancels(non_udacity_enrollments)
+#paid_engagement = remove_free_trial_cancels(non_udacity_engagement)
+#paid_submissions = remove_free_trial_cancels(non_udacity_submissions)
+
+
