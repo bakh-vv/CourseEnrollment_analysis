@@ -272,4 +272,77 @@ max(total_minutes_by_account.items(), key=operator.itemgetter(1))[0] # returns '
 
 #engagement_by_account['108']
 
-#as a result we fixed the within_one_week method
+### as a result we fixed the within_one_week method
+
+
+### calculating average amount of lessons completed during the first week by paid customers
+#we'll put the code we used previously in functions
+
+def get_total_metrics_by_account(metrics):
+    total_metrics_by_account = {}
+    for account_key, engagement_for_student in engagement_by_account.items():
+        total_metrics = 0
+        for engagement_record in engagement_for_student:
+            total_metrics += engagement_record[metrics]
+        total_metrics_by_account[account_key] = total_metrics
+    return total_metrics_by_account
+
+total_lessons_by_account = get_total_metrics_by_account('lessons_completed')
+
+total_lessons = list(total_lessons_by_account.values())
+
+np.mean(total_lessons)
+np.std(total_lessons)
+np.min(total_lessons)
+np.max(total_lessons)
+
+# even more abstract functions
+
+def group_data(data, key_name):
+    grouped_data = defaultdict(list)
+    for data_point in data:
+        key = data_point[key_name]
+        grouped_data[key].append(data_point)
+    return grouped_data
+
+def sum_grouped_items(grouped_data, field_name):
+    summed_data = {}
+    for key, data_points in grouped_data.items():
+        total = 0
+        for data_point in data_points:
+            total += data_point[field_name]
+        summed_data[key] = total
+    return summed_data
+
+def describe_data(data):
+    print(np.mean(data))
+    print(np.std(data))
+    print(np.min(data))
+    print(np.max(data))
+    
+engagement_by_account = group_data(paid_engagement_in_first_week, 'account_key')
+total_minutes_by_account = sum_grouped_items(engagement_by_account, 'total_minutes_visited')
+total_lessons_by_account = sum_grouped_items(engagement_by_account, 'lessons_completed')
+
+total_minutes = list(total_minutes_by_account.values())
+describe_data(total_minutes)
+
+total_lessons = list(total_lessons_by_account.values())
+describe_data(total_lessons)
+
+
+### calculating average amount of days the students visited the classroom at all (visited at least one course)
+
+#adding a filed to the data has_visited to denote whether the person visited any courses that day
+enhanced_engagement = list(paid_engagement_in_first_week)
+for record in enhanced_engagement:
+    if record['num_courses_visited'] > 0:
+        record['has_visited'] = 1
+    if record['num_courses_visited'] == 0:
+        record['has_visited'] = 0
+
+engagement_by_account = group_data(enhanced_engagement, 'account_key')
+total_visited_days_by_account = sum_grouped_items(engagement_by_account, 'has_visited')
+total_visited_days = list(total_visited_days_by_account.values())
+describe_data(total_visited_days)
+
