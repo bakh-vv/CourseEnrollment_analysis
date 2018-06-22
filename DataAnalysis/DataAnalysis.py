@@ -199,9 +199,14 @@ for enrollment in non_udacity_enrollments:
 print(len(paid_students))
 
 # filter engagement data for paid users duting their first week after enrolling
+#def within_one_week(join_date, engagement_date):
+#    time_delta = engagement_date - join_date
+#    return time_delta.days < 7
+
+# fixed within_one_week method
 def within_one_week(join_date, engagement_date):
     time_delta = engagement_date - join_date
-    return time_delta.days < 7
+    return time_delta.days < 7 and time_delta.days >= 0
 
 paid_engagement_in_first_week = []
 for record in non_udacity_engagement:
@@ -224,3 +229,47 @@ len(paid_engagement_in_first_week)
 #paid_submissions = remove_free_trial_cancels(non_udacity_submissions)
 
 
+# calculating average time spent in classroom during the first week by paid customers
+from collections import defaultdict
+
+engagement_by_account = defaultdict(list)
+for engagement_record in paid_engagement_in_first_week:
+    account_key = engagement_record['account_key']
+    engagement_by_account[account_key].append(engagement_record)
+
+total_minutes_by_account = {}
+for account_key, engagement_for_student in engagement_by_account.items():
+    total_minutes = 0
+    for engagement_record in engagement_for_student:
+        total_minutes += engagement_record['total_minutes_visited']
+    total_minutes_by_account[account_key] = total_minutes
+
+total_minutes = list(total_minutes_by_account.values())
+
+import numpy as np
+
+np.mean(total_minutes)
+np.std(total_minutes)
+np.min(total_minutes)
+np.max(total_minutes) # ~10568, something's off
+
+#trying to investigate the 10568 max figure
+import operator
+#finding the key of the max value in a dictionary
+max(total_minutes_by_account.items(), key=operator.itemgetter(1))[0] # returns '108'
+#alternative metohod to find
+#student_with_max_minutes = None
+#max_minutes = 0
+
+#for student, total_minutes in total_minutes_by_account.items():
+#    if total_minutes > max_minutes:
+#        max_minutes = total_minutes
+#        student_with_max_minutes = student
+
+#for engagement_record in paid_engagement_in_first_week:
+#    if engagement_record['account_key'] == student_with_max_minutes:
+#        print(engagement_record)
+
+#engagement_by_account['108']
+
+#as a result we fixed the within_one_week method
