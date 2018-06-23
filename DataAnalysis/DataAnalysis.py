@@ -374,31 +374,31 @@ len(non_passing_engagement)
 # comparing students who pass and those who don't
 passing_engagement_by_account = group_data(passing_engagement, 'account_key')
 
-total_minutes_by_account = sum_grouped_items(passing_engagement_by_account, 'total_minutes_visited')
-total_minutes = list(total_minutes_by_account.values())
-describe_data(total_minutes)
+p_total_minutes_by_account = sum_grouped_items(passing_engagement_by_account, 'total_minutes_visited')
+p_total_minutes = list(p_total_minutes_by_account.values())
+describe_data(p_total_minutes)
 
-total_lessons_by_account = sum_grouped_items(passing_engagement_by_account, 'lessons_completed')
-total_lessons = list(total_lessons_by_account.values())
-describe_data(total_lessons)
+p_total_lessons_by_account = sum_grouped_items(passing_engagement_by_account, 'lessons_completed')
+p_total_lessons = list(p_total_lessons_by_account.values())
+describe_data(p_total_lessons)
 
-total_visited_days_by_account = sum_grouped_items(passing_engagement_by_account, 'has_visited')
-total_visited_days = list(total_visited_days_by_account.values())
-describe_data(total_visited_days)
+p_total_visited_days_by_account = sum_grouped_items(passing_engagement_by_account, 'has_visited')
+p_total_visited_days = list(p_total_visited_days_by_account.values())
+describe_data(p_total_visited_days)
 
 non_passing_engagement_by_account = group_data(non_passing_engagement, 'account_key')
 
-total_minutes_by_account = sum_grouped_items(non_passing_engagement_by_account, 'total_minutes_visited')
-total_minutes = list(total_minutes_by_account.values())
-describe_data(total_minutes)
+n_total_minutes_by_account = sum_grouped_items(non_passing_engagement_by_account, 'total_minutes_visited')
+n_total_minutes = list(n_total_minutes_by_account.values())
+describe_data(n_total_minutes)
 
-total_lessons_by_account = sum_grouped_items(non_passing_engagement_by_account, 'lessons_completed')
-total_lessons = list(total_lessons_by_account.values())
-describe_data(total_lessons)
+n_total_lessons_by_account = sum_grouped_items(non_passing_engagement_by_account, 'lessons_completed')
+n_total_lessons = list(n_total_lessons_by_account.values())
+describe_data(n_total_lessons)
 
-total_visited_days_by_account = sum_grouped_items(non_passing_engagement_by_account, 'has_visited')
-total_visited_days = list(total_visited_days_by_account.values())
-describe_data(total_visited_days)
+n_total_visited_days_by_account = sum_grouped_items(non_passing_engagement_by_account, 'has_visited')
+n_total_visited_days = list(n_total_visited_days_by_account.values())
+describe_data(n_total_visited_days)
 
 # check if students who passed subway are more likely to pass other projects
 students_who_passed_other = [] #len = 486 people
@@ -415,3 +415,19 @@ passed_subway_and_more = set(students_who_passed).intersection(set(students_who_
 # number of student in engagement records who don't pass subway
 len(set([dict['account_key'] for dict in non_passing_engagement])) #348
 # rate of passing other projects is 52/348 = 0.15
+
+
+### Histograms
+data = [1, 2, 1, 3, 3, 1, 4, 2]
+
+import matplotlib.pyplot as plt
+plt.hist(data)
+plt.show()
+plt.ion()
+
+plt.hist(p_total_minutes)
+plt.hist(p_total_lessons)
+plt.hist(p_total_visited_days)
+plt.hist(n_total_minutes)
+plt.hist(n_total_lessons)
+plt.hist(n_total_visited_days)
