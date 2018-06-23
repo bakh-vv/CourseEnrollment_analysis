@@ -217,16 +217,16 @@ for record in non_udacity_engagement:
 
 len(paid_engagement_in_first_week)
 
-#def remove_free_trial_cancels(data):
-#    new_data = []
-#    for data_point in data:
-#        if data_point['account_key'] in paid_students:
-#            new_data.append(data_point)
-#    return new_data
+def remove_free_trial_cancels(data):
+    new_data = []
+    for data_point in data:
+        if data_point['account_key'] in paid_students:
+            new_data.append(data_point)
+    return new_data
 
-#paid_enrollments = remove_free_trial_cancels(non_udacity_enrollments)
-#paid_engagement = remove_free_trial_cancels(non_udacity_engagement)
-#paid_submissions = remove_free_trial_cancels(non_udacity_submissions)
+paid_enrollments = remove_free_trial_cancels(non_udacity_enrollments)
+paid_engagement = remove_free_trial_cancels(non_udacity_engagement)
+paid_submissions = remove_free_trial_cancels(non_udacity_submissions)
 
 
 # calculating average time spent in classroom during the first week by paid customers
@@ -346,3 +346,26 @@ total_visited_days_by_account = sum_grouped_items(engagement_by_account, 'has_vi
 total_visited_days = list(total_visited_days_by_account.values())
 describe_data(total_visited_days)
 
+
+### splitting out passing and non-passing students engagement data
+subway_project_lesson_keys = ['746169184', '3176718735']
+good_ratings = ['PASSED', 'DISTINCTION']
+
+passing_engagement = []
+non_passing_engagement = []
+
+students_who_passed = []
+for record in paid_submissions:
+    account_key = record['account_key']
+    if (record['assigned_rating'] == 'PASSED' or record['assigned_rating'] == 'DISTINCTION') and \
+        record['lesson_key'] in subway_project_lesson_keys and account_key not in students_who_passed:
+        students_who_passed.append(account_key)
+
+for record in paid_engagement_in_first_week:
+    if record['account_key'] in students_who_passed:
+        passing_engagement.append(record)
+    else:
+        non_passing_engagement.append(record)
+        
+len(passing_engagement)
+len(non_passing_engagement)
