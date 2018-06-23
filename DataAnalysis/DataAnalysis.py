@@ -369,3 +369,49 @@ for record in paid_engagement_in_first_week:
         
 len(passing_engagement)
 len(non_passing_engagement)
+
+
+# comparing students who pass and those who don't
+passing_engagement_by_account = group_data(passing_engagement, 'account_key')
+
+total_minutes_by_account = sum_grouped_items(passing_engagement_by_account, 'total_minutes_visited')
+total_minutes = list(total_minutes_by_account.values())
+describe_data(total_minutes)
+
+total_lessons_by_account = sum_grouped_items(passing_engagement_by_account, 'lessons_completed')
+total_lessons = list(total_lessons_by_account.values())
+describe_data(total_lessons)
+
+total_visited_days_by_account = sum_grouped_items(passing_engagement_by_account, 'has_visited')
+total_visited_days = list(total_visited_days_by_account.values())
+describe_data(total_visited_days)
+
+non_passing_engagement_by_account = group_data(non_passing_engagement, 'account_key')
+
+total_minutes_by_account = sum_grouped_items(non_passing_engagement_by_account, 'total_minutes_visited')
+total_minutes = list(total_minutes_by_account.values())
+describe_data(total_minutes)
+
+total_lessons_by_account = sum_grouped_items(non_passing_engagement_by_account, 'lessons_completed')
+total_lessons = list(total_lessons_by_account.values())
+describe_data(total_lessons)
+
+total_visited_days_by_account = sum_grouped_items(non_passing_engagement_by_account, 'has_visited')
+total_visited_days = list(total_visited_days_by_account.values())
+describe_data(total_visited_days)
+
+# check if students who passed subway are more likely to pass other projects
+students_who_passed_other = [] #len = 486 people
+for record in paid_submissions:
+    account_key = record['account_key']
+    if (record['assigned_rating'] == 'PASSED' or record['assigned_rating'] == 'DISTINCTION') and \
+        record['lesson_key'] not in subway_project_lesson_keys and account_key not in students_who_passed_other:
+        students_who_passed_other.append(account_key)
+
+passed_subway_and_more = set(students_who_passed).intersection(set(students_who_passed_other)) # len = 434
+# means only 52 people passed any other course after not passing subway
+# 647 people passed subway. the rate of passing other projects is 434/647= 0.67
+
+# number of student in engagement records who don't pass subway
+len(set([dict['account_key'] for dict in non_passing_engagement])) #348
+# rate of passing other projects is 52/348 = 0.15
