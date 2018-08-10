@@ -421,13 +421,31 @@ len(set([dict['account_key'] for dict in non_passing_engagement])) #348
 data = [1, 2, 1, 3, 3, 1, 4, 2]
 
 import matplotlib.pyplot as plt
-plt.hist(data)
-plt.show()
-plt.ion()
+import seaborn as sns
+#plt.hist(data)
 
-plt.hist(p_total_minutes)
-plt.hist(p_total_lessons)
-plt.hist(p_total_visited_days)
-plt.hist(n_total_minutes)
-plt.hist(n_total_lessons)
-plt.hist(n_total_visited_days)
+#plt.ion()
+
+#plt.hist(p_total_minutes)
+#plt.hist(p_total_lessons)
+#plt.hist(p_total_visited_days)
+#plt.hist(n_total_minutes)
+#plt.hist(n_total_lessons)
+#plt.hist(n_total_visited_days)
+
+
+
+### Making plots nicer
+
+#bins argument, which sets the number of bins used by your histogram
+import seaborn as sns
+plt.hist(p_total_visited_days, bins=8)
+plt.xlabel("Number of days")
+plt.ylabel("Number of students")
+plt.title("Amount of active days in the first week")
+plt.show()
+
+sns.distplot(n_total_visited_days)
+plt.show()
+
+
